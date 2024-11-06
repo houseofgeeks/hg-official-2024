@@ -2,10 +2,13 @@ import { Request, Response } from "express";
 import { auth, db } from "../config/firebase.config"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { UserRole } from "../models/userModel";
+import { UserRole, User } from "../models/userModel";
 import { StatusCodes } from "http-status-codes";
 import { RequestHandler } from 'express';
-
+import jwt from "jsonwebtoken";
+const generateToken = (userId: string, role: UserRole): string => {
+    return jwt.sign({ userId, role }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+}
 
 interface SignupRequest {
     email: string;
@@ -33,4 +36,78 @@ export const registerUser: RequestHandler = async (req: Request<{}, {}, SignupRe
             success: false
         });
     }
+};
+export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupRequest>, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        if (!user.emailVerified) {
+            res.status(StatusCodes.FORBIDDEN).json({
+                message: "Email not verified. Please check your inbox."
+            });
+            return;
+        }
+
+
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+
+        if (!userData || !userData.role) {
+            res.status(StatusCodes.BAD_GATEWAY).json({
+                message: "No role assigned to the user."
+            });
+            return;
+        }
+
+        const role: UserRole = userData.role;
+
+        const token = generateToken(user.uid, role);
+
+        res.cookie("token", token, { httpOnly: true, secure: true });
+
+        res.status(200).json({
+            message: "Login successful",
+            role
+        });
+
+    } catch (error) {
+        console.log("Error during login: ", error);
+        res.status(StatusCodes.UNAUTHORIZED).json({
+            error: "Invalid email or password",
+            success: false
+        });
+    }
+};
+
+export const authenticateJWT: RequestHandler = (req: Request, res: Response, next: Function) => {
+    const token = req.cookies["token"];
+
+    if (!token) {
+        res.status(StatusCodes.FORBIDDEN).json({ message: "Access Denied" });
+        return;
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
+        if (err) return res.status(StatusCodes.FORBIDDEN).json({ message: "Invalid Token" });
+
+        req.user = decoded as User;
+        next();
+    });
+};
+
+
+export const getUserRole: RequestHandler = async (req: Request, res: Response) => {
+    const user = req.user as User;
+
+    if (!user) {
+        res.status(StatusCodes.UNAUTHORIZED).json({ message: "Not authenticated" });
+        return;
+    }
+
+    res.status(200).json({
+        role: user.role
+    });
 };

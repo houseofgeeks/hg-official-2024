@@ -3,8 +3,17 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import apiRoutes from './routes/index'
+import { config } from "dotenv";
+import cookieParser from "cookie-parser";
+
+// Load environment variables
+config();
+
+// Middleware setup
 const PORT: number = 3000;
 const app: Application = express();
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
