@@ -6,8 +6,8 @@ import { UserRole, User } from "../models/userModel";
 import { StatusCodes } from "http-status-codes";
 import { RequestHandler } from 'express';
 import jwt from "jsonwebtoken";
-const generateToken = (userId: string, role: UserRole): string => {
-    return jwt.sign({ userId, role }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+const generateToken = (uid: string, role: UserRole): string => {
+    return jwt.sign({ uid, role }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 }
 
 interface SignupRequest {
