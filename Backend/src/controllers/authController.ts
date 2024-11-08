@@ -82,7 +82,7 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
     }
 };
 
-export const authenticateJWT: RequestHandler = (req: Request, res: Response, next: Function) => {
+export const authenticateJWT: RequestHandler = (req: Request & { user?: User }, res: Response, next: Function) => {
     const token = req.cookies["token"];
 
     if (!token) {
@@ -99,7 +99,7 @@ export const authenticateJWT: RequestHandler = (req: Request, res: Response, nex
 };
 
 
-export const getUserRole: RequestHandler = async (req: Request, res: Response) => {
+export const getUserRole: RequestHandler = async (req: Request & { user?: User }, res: Response) => {
     const user = req.user as User;
 
     if (!user) {
