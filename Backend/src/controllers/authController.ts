@@ -46,7 +46,8 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
 
         if (!user.emailVerified) {
             res.status(StatusCodes.FORBIDDEN).json({
-                message: "Email not verified. Please check your inbox."
+                message: "Email not verified. Please check your inbox.",
+                success: false
             });
             return;
         }
@@ -57,7 +58,8 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
 
         if (!userData || !userData.role) {
             res.status(StatusCodes.BAD_GATEWAY).json({
-                message: "No role assigned to the user."
+                message: "No role assigned to the user.",
+                success: false
             });
             return;
         }
@@ -86,12 +88,18 @@ export const authenticateJWT: RequestHandler = (req: Request & { user?: User }, 
     const token = req.cookies["token"];
 
     if (!token) {
-        res.status(StatusCodes.FORBIDDEN).json({ message: "Access Denied" });
+        res.status(StatusCodes.FORBIDDEN).json({
+            message: "Access Denied",
+            success: false
+        });
         return;
     }
 
     jwt.verify(token, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
-        if (err) return res.status(StatusCodes.FORBIDDEN).json({ message: "Invalid Token" });
+        if (err) return res.status(StatusCodes.FORBIDDEN).json({
+            message: "Invalid Token",
+            success: false
+        });
 
         req.user = decoded as User;
         next();
@@ -103,7 +111,10 @@ export const getUserRole: RequestHandler = async (req: Request & { user?: User }
     const user = req.user as User;
 
     if (!user) {
-        res.status(StatusCodes.UNAUTHORIZED).json({ message: "Not authenticated" });
+        res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "Not authenticated",
+            success: false
+        });
         return;
     }
 
