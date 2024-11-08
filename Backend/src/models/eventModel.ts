@@ -17,5 +17,5 @@ export interface Event {
     description: string,
     createdAt: Timestamp;
     updatedAt: Timestamp;
-    creatorId: string
+    creatorId?: string
 }
