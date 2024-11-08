@@ -89,3 +89,75 @@ export const getEventsByWing = async (req: Request, res: Response) => {
         })
     }
 }
+
+
+export const updateEvent = async (req: Request & { user?: User }, res: Response) => {
+
+    const { eventId } = req.params;
+    const user = req.user as User;
+    if (user?.role !== UserRole.LEAD && user?.role !== UserRole.ADMIN) {
+        res.status(StatusCodes.FORBIDDEN).json({
+            success: false,
+            message: "Unauthorized to create Event"
+        })
+        return;
+    }
+    try {
+        const eventDoc = doc(db, 'events', eventId);
+        const ExistingEvent = await getDoc(eventDoc);
+        if (!ExistingEvent.exists()) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                message: "Event doesnt exist"
+            })
+            return;
+        }
+        await updateDoc(eventDoc, {
+            ...req.body,
+            updatedAt: Timestamp.now()
+        })
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: "Event updated successfully"
+        })
+
+
+    }
+    catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            details: error,
+            success: false
+        })
+    }
+
+
+}
+
+
+export const deleteEvent = async (req: Request & { user?: User }, res: Response) => {
+    const { eventId } = req.params;
+    console.log('eventID is ', eventId);
+    const user = req.user as User
+    if (user?.role !== UserRole.LEAD && user?.role !== UserRole.ADMIN) {
+        res.status(StatusCodes.FORBIDDEN).json({
+            success: false,
+            message: "Unauthorized to delete Event"
+        })
+        return;
+    }
+    try {
+        const msg = await deleteDoc(doc(db, 'events', eventId));
+        console.log("msg is ", msg)
+        res.status(StatusCodes.OK).json({
+            message: "Succesffully detleted event ",
+            success: true
+        })
+
+    }
+    catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Coudlnt delte the event",
+            sucess: false
+        })
+    }
+
+}

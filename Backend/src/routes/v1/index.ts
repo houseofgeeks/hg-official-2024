@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
-import { createEvent, getAllEvents, getEventsByWing } from '../../controllers/eventController';
+import { createEvent, deleteEvent, getAllEvents, getEventsByWing, updateEvent } from '../../controllers/eventController';
 const router: Router = express.Router();
 
 //Authentication Routes
@@ -14,5 +14,8 @@ router.get("/role", authenticateJWT, getUserRole);
 router.post("/event", authenticateJWT, createEvent);
 router.get("/wing", getAllEvents);
 router.get("/wing/:wing", getEventsByWing);
+router.delete("/event/:eventId", authenticateJWT, deleteEvent);
+router.put("/event/:eventId", authenticateJWT, updateEvent);
+
 
 export default router;
