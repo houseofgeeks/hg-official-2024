@@ -26,7 +26,7 @@ export const createEvent = async (req: Request & { user?: User }, res: Response)
             description,
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
-            creatorId: user?.uid || "moye"
+            creatorId: user?.uid
         }
         console.log(title, wing, date, images, description);
         if (!title || !wing || !date || !images || !description) {
@@ -56,3 +56,36 @@ export const createEvent = async (req: Request & { user?: User }, res: Response)
 
 }
 
+export const getAllEvents = async (req: Request, res: Response) => {
+    try {
+        const eventSnapshot = await getDocs(collection(db, 'events'));
+        const events = eventSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.status(StatusCodes.OK).json(events);
+    }
+    catch (error) {
+        console.log("Error is ", error);
+        res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            message: "Couldnt fetch events",
+            details: error
+        })
+    }
+}
+
+export const getEventsByWing = async (req: Request, res: Response) => {
+    const wing = req.params.wing as Wing
+
+    try {
+        const eventBywing = query(collection(db, 'events'), where("wing", "==", wing));
+        const wingEventsSnapshot = await getDocs(eventBywing);
+        const wingEvents = wingEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.status(StatusCodes.OK).json(wingEvents);
+
+    }
+    catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            error: "Failed to fetch wing events ",
+            details: error
+        })
+    }
+}

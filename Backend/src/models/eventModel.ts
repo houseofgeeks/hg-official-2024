@@ -17,9 +17,5 @@ export interface Event {
     description: string,
     createdAt: Timestamp;
     updatedAt: Timestamp;
-<<<<<<< HEAD
     creatorId?: string
-=======
-    creatorId: string
->>>>>>> cc98ae9 (chore:Created event Model)
 }
