@@ -6,10 +6,8 @@ import apiRoutes from './routes/index'
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 
-// Load environment variables
 config();
 
-// Middleware setup
 const PORT: number = 3000;
 const app: Application = express();
 app.use(express.json());
