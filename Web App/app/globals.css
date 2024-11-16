@@ -76,3 +76,80 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes dot1 {
+  0%, 20% { opacity: 0; }
+  33%, 100% { opacity: 1; }
+}
+
+@keyframes dot2 {
+  0%, 45% { opacity: 0; }
+  58%, 100% { opacity: 1; }
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.corner-box::before,
+.corner-box::after {
+  content: '';
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: black;
+}
+
+.corner-top-left::before {
+  top: -2.5rem;
+  left: -2.5rem;
+}
+
+.corner-top-right::before {
+  top: -2.5rem;
+  right: -2.5rem;
+}
+
+.corner-bottom-left::after {
+  bottom: -2.5rem;
+  left: -2.5rem;
+}
+
+.corner-bottom-right::after {
+  bottom: -2.5rem;
+  right: -2.5rem;
+}
+
+.corner-all::before,
+.corner-all::after {
+  content: '';
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: white;
+}
+
+.corner-all::before {
+  top: -2.5rem;
+  right: -2.5rem;
+}
+
+.corner-all::before {
+  top: -2.5rem;
+  left: -2.5rem;
+}
+
+.corner-all::after {
+  bottom: -2.5rem;
+  left: -2.5rem;
+}
+
+.corner-all::after {
+  bottom: -2.5rem;
+  right: -2.5rem;
+}
