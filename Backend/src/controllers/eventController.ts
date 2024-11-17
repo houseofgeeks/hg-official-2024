@@ -72,24 +72,37 @@ export const getAllEvents = async (req: Request, res: Response) => {
     }
 }
 
-export const getEventsByWing = async (req: Request, res: Response) => {
-    const wing = req.params.wing as Wing
-
-    try {
-        const eventBywing = query(collection(db, 'events'), where("wing", "==", wing));
-        const wingEventsSnapshot = await getDocs(eventBywing);
-        const wingEvents = wingEventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.status(StatusCodes.OK).json(wingEvents);
-
+export const getEventById = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  if (!id) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      error: 'Missing parameter',
+      details: 'Event ID is required'
+    });
+    return;
+  }
+  try {
+    const eventRef = doc(collection(db, "events"), id);
+    const eventSnapshot = await getDoc(eventRef);
+    if (!eventSnapshot.exists()) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        error: 'Event not found',
+        details: `No event found with id: ${id}`
+      });
+      return;
     }
-    catch (error) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-            error: "Failed to fetch wing events ",
-            details: error
-        })
-    }
-}
-
+    const event = {
+      id: eventSnapshot.id,
+      ...eventSnapshot.data()
+    };
+    res.status(StatusCodes.OK).json(event);
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: 'Failed to fetch event',
+      details: error
+    });
+  }
+};
 
 export const updateEvent = async (req: Request & { user?: User }, res: Response) => {
 

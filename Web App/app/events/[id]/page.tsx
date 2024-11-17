@@ -16,7 +16,7 @@ export default function EventDetailsPage() {
     const fetchEvent = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/v1/events/${params.id}`);
+        const response = await axios.get(`/api/v1/event/${params.id}`);
         setEvent(response.data);
       } catch (error) {
         console.error('Error fetching event details:', error);
