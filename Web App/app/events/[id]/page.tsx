@@ -58,7 +58,7 @@ export default function EventDetailsPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center text-purple-600">{event.title}</h1>
       <p className="mt-2 text-center text-gray-500">
-        {/* {new Date(event.date).toLocaleDateString()} */}
+        {new Date(event.date).toLocaleDateString()}
       </p>
       <div className="mt-8 relative w-full h-96 max-w-3xl mx-auto">
         <Image

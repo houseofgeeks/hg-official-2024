@@ -85,7 +85,7 @@ export default function EventsPage() {
                   />
                 </div>
                 <p className="mt-2 text-sm text-gray-500">
-                  {/* {new Date(event.date.toDate()).toLocaleDateString()} */}
+                  {new Date(event.date).toLocaleDateString()}
                 </p>
                 <p className="mt-2 text-gray-700">{event.description}</p>
               </CardContent>
