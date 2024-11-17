@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 
 config();
 
-const PORT: number = 3000;
+const PORT: number = parseInt(process.env.PORT!);
 const app: Application = express();
 app.use(express.json());
 app.use(cookieParser());
