@@ -13,7 +13,7 @@ export interface IEvent {
     id?: string;
     title: string;
     wing: Wing;
-    date: Date;
+    date: Timestamp;
     images: string[];
     description: string,
     createdAt: Timestamp;

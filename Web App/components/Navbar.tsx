@@ -21,11 +21,14 @@ const navItems: navItem[] = [
     title: "Products",
   },
   {
+    title: "Events"
+  },
+  {
     title: "Team",
   },
   {
     title: "About Us",
-  },
+  }
 ];
 
 const Navbar = () => {
@@ -40,6 +43,8 @@ const Navbar = () => {
                   src="/assets/icons/hg_logo_1.png"
                   className="h-10"
                   alt="hg_logo.png"
+                  width={100}
+                  height={100}
                 />
               </span>
             </div>
