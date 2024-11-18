@@ -5,7 +5,7 @@ import EventsCarousel from "@/components/EventsCarousel";
 import Navbar from "@/components/Navbar";
 import PageNav from "@/components/PageNav";
 import Wing from "@/components/Wing";
-import { li } from "framer-motion/client";
+import Image from "next/image";
 
 const wings = [
   {
@@ -161,19 +161,24 @@ export default function Home() {
             />
           </div>
           <div className="text-xl max-md:w-[90%] max-md:text-sm font-spaceGrotesk font-semibold text-white w-[38%]">
-            House of Geeks is IIIT Ranchi's coding club, hosting hackathons and
+            House of Geeks is IIIT Ranchi`&apos;`s coding club, hosting hackathons and
             workshops to build skills and foster innovation among tech
             enthusiasts.
           </div>
         </div>
         <div className="absolute w-[60%] top-0 right-0 max-md:hidden">
-          <img
+          <Image
             src="/assets/images/binary_bg.png"
             className="w-full h-[60vh] opacity-50"
+            alt="binary_bg.png"
           />
         </div>
       </section>
-      <img src="/assets/images/separator1.png" className="w-full" />
+      <Image
+        src="/assets/images/separator1.png"
+        className="w-full"
+        alt="separator.png"
+      />
       <section className="h-fit bg-white" id="wings">
         <div className="m-24 p-10 text-[#9A43B1]">
           <AnimatingText
@@ -195,7 +200,11 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <img src="/assets/images/separator2.png" className="w-full" />
+      <Image
+        src="/assets/images/separator2.png"
+        className="w-full"
+        alt="separator.png"
+      />
       <section className="w-full h-fit bg-black flex gap-20 pb-40" id="connect">
         <div className="m-24 mt-0 p-10 relative top-40 h-fit">
           <AnimatingText
@@ -222,7 +231,11 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <img src="/assets/images/separator3.png" className="w-full" />
+      <Image
+        src="/assets/images/separator3.png"
+        className="w-full"
+        alt="separator.png"
+      />
       <section className="h-fit bg-white" id="events">
         <div className="mx-20 mb-10 mt-0 p-10 text-white">
           <AnimatingText
@@ -236,7 +249,11 @@ export default function Home() {
           <EventsCarousel />
         </div>
       </section>
-      <img src="/assets/images/separator4.png" className="w-full" />
+      <Image
+        src="/assets/images/separator4.png"
+        className="w-full"
+        alt="separator.png"
+      />
       <section className="bg-black h-fit pb-10" id="testimonials">
         <div className="mx-20 mt-0 p-10 text-white">
           <AnimatingText
@@ -254,14 +271,20 @@ export default function Home() {
                 className="h-fit pb-5 font-spaceGrotesk font-semibold text-sm bg-[#9A43B1] text-black"
               >
                 <div className="flex items-center gap-5 justify-center w-full relative -top-[4rem]">
-                  <img
+                  <Image
                     src="/assets/icons/double_quotes.png"
                     className="h-20 w-20 transform rotate-180"
+                    alt="double_quotes.png"
                   />
-                  <img src={item.image} className="h-32 w-32" />
-                  <img
+                  <Image
+                    src={item.image}
+                    className="h-32 w-32"
+                    alt="image.png"
+                  />
+                  <Image
                     src="/assets/icons/double_quotes.png"
                     className="h-20 w-20"
+                    alt="double_quotes.png"
                   />
                 </div>
                 <div className="relative -top-[2rem] px-10 flex flex-col gap-5 justify-center items-center text-center">
@@ -283,14 +306,20 @@ export default function Home() {
                 className="h-fit font-spaceGrotesk font-semibold text-sm bg-[#9A43B1] text-black"
               >
                 <div className="flex items-center gap-5 justify-center w-full relative -top-[4rem]">
-                  <img
+                  <Image
                     src="/assets/icons/double_quotes.png"
                     className="h-20 w-20 transform rotate-180"
+                    alt="double_quotes.png"
                   />
-                  <img src={item.image} className="h-32 w-32" />
-                  <img
+                  <Image
+                    src={item.image}
+                    className="h-32 w-32"
+                    alt="image.png"
+                  />
+                  <Image
                     src="/assets/icons/double_quotes.png"
                     className="h-20 w-20"
+                    alt="double_quotes.png"
                   />
                 </div>
                 <div className="relative -top-[2rem] px-10 flex flex-col justify-center items-center text-center">
@@ -308,7 +337,11 @@ export default function Home() {
           })}
         </div>
       </section>
-      <img src="/assets/images/separator5.png" className="w-full" />
+      <Image
+        src="/assets/images/separator5.png"
+        className="w-full"
+        alt="separator.png"
+      />
       <section
         className="h-fit min-h-[26rem] bg-[#9A43B1] relative overflow-hidden"
         id="intro"
@@ -345,9 +378,10 @@ export default function Home() {
         </div>
         <div className="text-white font-spaceGrotesk my-10 mx-20 text-lg">Copyright @ House of Geeks, 2024</div>
         <div className="absolute bottom-0 right-0 max-md:hidden">
-          <img
+          <Image
             src="/assets/images/hg_logo.png"
             className="object-contain h-96 mx-20 mb-10"
+            alt="hg_logo.png"
           />
         </div>
       </section>

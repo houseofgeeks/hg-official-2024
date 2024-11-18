@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const ImageCarousel = () => {
   const slides = [
@@ -95,7 +96,7 @@ const ImageCarousel = () => {
                   }}
                 >
                   <div className="relative group">
-                    <img
+                    <Image
                       src={slide.image}
                       alt={slide.title}
                       className={`w-[30rem] h-80 object-cover shadow-lg ${

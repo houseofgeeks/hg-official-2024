@@ -3,11 +3,11 @@
 import React, { useEffect, useRef } from 'react';
 
 const MatrixRain = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas: any = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const canvas = canvasRef.current as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     // Set the canvas dimensions
     canvas.width = window.innerWidth;
@@ -17,7 +17,7 @@ const MatrixRain = () => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVXYZ0123456789'.repeat(6).split('');
     const fontSize = 16; // Increased font size for larger digits
     const columns = Math.round(canvas.width / fontSize);
-    const drops: any = Array.from({ length: columns }).fill(1);
+    const drops: number[] = Array.from({ length: columns }, () => 1);
 
     // Draw function for the animation
     const draw = () => {

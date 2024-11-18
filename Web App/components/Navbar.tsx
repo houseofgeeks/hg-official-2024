@@ -1,13 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Search, User, Bell, Settings } from "lucide-react";
+import { Menu, User, Bell } from "lucide-react";
+import Image from "next/image";
 
 interface navItem {
   title: string;
@@ -21,11 +21,14 @@ const navItems: navItem[] = [
     title: "Products",
   },
   {
+    title: "Events"
+  },
+  {
     title: "Team",
   },
   {
     title: "About Us",
-  },
+  }
 ];
 
 const Navbar = () => {
@@ -36,7 +39,13 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-xl font-bold">
-                <img src="/assets/icons/hg_logo_1.png" className="h-10" />
+                <Image
+                  src="/assets/icons/hg_logo_1.png"
+                  className="h-10"
+                  alt="hg_logo.png"
+                  width={100}
+                  height={100}
+                />
               </span>
             </div>
 
