@@ -1,3 +1,5 @@
+import { Wing } from "./eventModel";
+
 export enum UserRole {
     STUDENT = 'student',
     COORDINATOR = 'coordinator',
@@ -10,4 +12,6 @@ export interface User {
     email: string;
     role: UserRole;
     emailVerified: boolean;
+    levels: Record<Wing, number>;
+    assignedWings?: Wing[];
 }
