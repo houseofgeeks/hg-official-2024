@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu, User, Bell } from "lucide-react";
-import Image from "next/image";
 
 interface navItem {
   title: string;
@@ -16,9 +15,6 @@ interface navItem {
 const navItems: navItem[] = [
   {
     title: "Dashboard",
-  },
-  {
-    title: "Products",
   },
   {
     title: "Events"
@@ -39,12 +35,10 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-xl font-bold">
-                <Image
+                <img
                   src="/assets/icons/hg_logo_1.png"
                   className="h-10"
                   alt="hg_logo.png"
-                  width={100}
-                  height={100}
                 />
               </span>
             </div>
