@@ -1,7 +1,9 @@
 import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
+import { assignWings } from '../../controllers/userController';
 const router: Router = express.Router();
+
 
 //Authentication Routes
 router.post('/signup', registerUser);
@@ -17,6 +19,13 @@ router.get("/event/:id", getEventById);
 router.delete("/event/:eventId", authenticateJWT, deleteEvent);
 router.put("/event/:eventId", authenticateJWT, updateEvent);
 
+// Admin Routes
+// input format -> userId(uuid),wings= [](array format m dena) also sirf admin dega permissions
+router.post("/assign-wings", authenticateJWT, assignWings);
 
 //Level Routes
+
+
+
+
 export default router;
