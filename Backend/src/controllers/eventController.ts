@@ -73,35 +73,35 @@ export const getAllEvents = async (req: Request, res: Response) => {
 }
 
 export const getEventById = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  if (!id) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      error: 'Missing parameter',
-      details: 'Event ID is required'
-    });
-    return;
-  }
-  try {
-    const eventRef = doc(collection(db, "events"), id);
-    const eventSnapshot = await getDoc(eventRef);
-    if (!eventSnapshot.exists()) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        error: 'Event not found',
-        details: `No event found with id: ${id}`
-      });
-      return;
+    const { id } = req.params;
+    if (!id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            error: 'Missing parameter',
+            details: 'Event ID is required'
+        });
+        return;
     }
-    const event = {
-      id: eventSnapshot.id,
-      ...eventSnapshot.data()
-    };
-    res.status(StatusCodes.OK).json(event);
-  } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: 'Failed to fetch event',
-      details: error
-    });
-  }
+    try {
+        const eventRef = doc(collection(db, "events"), id);
+        const eventSnapshot = await getDoc(eventRef);
+        if (!eventSnapshot.exists()) {
+            res.status(StatusCodes.NOT_FOUND).json({
+                error: 'Event not found',
+                details: `No event found with id: ${id}`
+            });
+            return;
+        }
+        const event = {
+            id: eventSnapshot.id,
+            ...eventSnapshot.data()
+        };
+        res.status(StatusCodes.OK).json(event);
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            error: 'Failed to fetch event',
+            details: error
+        });
+    }
 };
 
 export const updateEvent = async (req: Request & { user?: User }, res: Response) => {
