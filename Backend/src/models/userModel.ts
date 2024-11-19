@@ -15,3 +15,4 @@ export interface User {
     levels: Record<Wing, number>;
     assignedWings?: Wing[];
 }
+

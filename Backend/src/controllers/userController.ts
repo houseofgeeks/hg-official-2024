@@ -13,7 +13,6 @@ export const assignWings = async (req: Request & { user?: User }, res: Response)
         return;
     }
 
-    // Check if wings is a valid array
     if (!Array.isArray(wings)) {
         res.status(400).json({ message: "Invalid wings format. It should be an array." });
         return;
@@ -36,7 +35,6 @@ export const assignWings = async (req: Request & { user?: User }, res: Response)
             return;
         }
 
-        // Ensure wings is an array and handle merging
         const updatedWings = Array.from(new Set([...(userData.assignedWings || []), ...wings]));
 
         await updateDoc(doc(db, "users", userId), {

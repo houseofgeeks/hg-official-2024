@@ -6,6 +6,11 @@ import { UserRole, User } from "../models/userModel";
 import { StatusCodes } from "http-status-codes";
 import { RequestHandler } from 'express';
 import jwt from "jsonwebtoken";
+import { Wing } from "../models/eventModel";
+interface userData {
+    role: UserRole;
+    levels: Record<Wing, number>;
+}
 const generateToken = (uid: string, role: UserRole): string => {
     return jwt.sign({ uid, role }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 }
@@ -20,23 +25,37 @@ interface SigninRequest {
     email: string;
     password: string;
 }
-
 export const registerUser: RequestHandler = async (req: Request<{}, {}, SignupRequest>, res: Response) => {
     const { email, password, role } = req.body;
+
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        await setDoc(doc(db, 'users', user.uid), { role });
+
+        // Initialize levels with 0 for all wings
+        const levels: Record<Wing, number> = Object.values(Wing).reduce((acc, wing) => {
+            acc[wing as Wing] = 0; // Default level for each wing
+            return acc;
+        }, {} as Record<Wing, number>);
+
+        const userData: userData = {
+            role,
+            levels,
+        };
+
+        await setDoc(doc(db, "users", user.uid), userData);
         await sendEmailVerification(user);
-        res.status(200).json({ message: 'Please verify your email to activate your account.' });
+
+        res.status(200).json({ message: "Please verify your email to activate your account." });
     } catch (error) {
-        console.log("error is ", error)
+        console.error("Error during registration:", error);
         res.status(StatusCodes.BAD_GATEWAY).json({
-            error: 'couldnt sign in',
-            success: false
+            error: "Could not register user.",
+            success: false,
         });
     }
 };
+
 export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupRequest>, res: Response) => {
     const { email, password } = req.body;
 
