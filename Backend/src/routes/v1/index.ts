@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
-import { assignWings } from '../../controllers/userController';
+import { assignWings, showUserProfile } from '../../controllers/userController';
 import { getPendingRequestsByWing, submitLevelUpRequest } from '../../controllers/levelController';
 const router: Router = express.Router();
 
@@ -23,11 +23,19 @@ router.put("/event/:eventId", authenticateJWT, updateEvent);
 // Admin Routes
 // input format -> userId(uuid),wings= [](array format m dena) also sirf admin dega permission
 router.post("/assign-wings", authenticateJWT, assignWings);
+router.get("/user/:username", showUserProfile);
+
 
 //Level Routes
+// Takes these as  input 
+// userId: string;
+//     wing: Wing; // refer to eventModel.ts in models for Wing Names, follow strictly
+//     proofOfWork: string
 
 router.post("/requests", authenticateJWT, submitLevelUpRequest);
+// Gets all pending requests by wing Name 
 router.get("/requests/:wing/pending", authenticateJWT, getPendingRequestsByWing);
+// router.patch("/requests/:requestId/accept", authenticateJWT, acceptLevelUpRequest);
 
 
 

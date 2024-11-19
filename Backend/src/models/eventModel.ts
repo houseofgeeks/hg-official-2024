@@ -3,9 +3,9 @@ export enum Wing {
     CP = "CP",
     SD = 'SD',
     ML_AI = 'ML/AI',
-    IOT_ROBOTICS = 'IOT and Robotics',
+    IOT_ROBOTICS = 'IOTandRobotics',
     ARCANUM = 'Arcanum',
-    CYBERSECURITY = 'Cyber Security'
+    CYBERSECURITY = 'CyberSecurity'
 }
 
 export interface Event {

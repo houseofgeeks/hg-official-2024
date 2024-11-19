@@ -10,6 +10,8 @@ export enum UserRole {
 export interface User {
     uid: string;
     email: string;
+    username: string;
+    name: string;
     role: UserRole;
     emailVerified: boolean;
     levels: Record<Wing, number>;

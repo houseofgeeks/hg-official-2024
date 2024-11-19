@@ -9,6 +9,8 @@ import jwt from "jsonwebtoken";
 import { Wing } from "../models/eventModel";
 interface userData {
     role: UserRole;
+    name: string;
+    username: string;
     levels: Record<Wing, number>;
 }
 const generateToken = (uid: string, role: UserRole): string => {
@@ -18,39 +20,69 @@ const generateToken = (uid: string, role: UserRole): string => {
 interface SignupRequest {
     email: string;
     password: string;
+    name: string;
+    username: string;
     role: UserRole;
 }
 
 interface SigninRequest {
     email: string;
     password: string;
-}
-export const registerUser: RequestHandler = async (req: Request<{}, {}, SignupRequest>, res: Response) => {
-    const { email, password, role } = req.body;
+
+}export const registerUser = async (req: Request, res: Response) => {
+    const { email, password, role, name, username } = req.body;
+
+    // Validate input fields
+    if (!email || !password || !role || !name || !username) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "All fields (email, password, role, name, username) are required.",
+            success: false,
+        });
+        return;
+    }
 
     try {
+        // Create a Firebase user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Initialize levels with 0 for all wings
+        // Initialize levels for each wing
         const levels: Record<Wing, number> = Object.values(Wing).reduce((acc, wing) => {
-            acc[wing as Wing] = 0; // Default level for each wing
+            acc[wing as Wing] = 0; // Default level is 0
             return acc;
         }, {} as Record<Wing, number>);
 
+        // Prepare user data for Firestore
         const userData: userData = {
             role,
+            name,
+            username,
             levels,
         };
 
+        // Save user data in Firestore
         await setDoc(doc(db, "users", user.uid), userData);
+
+        // Send email verification
         await sendEmailVerification(user);
 
-        res.status(200).json({ message: "Please verify your email to activate your account." });
-    } catch (error) {
+        // Respond with success
+        res.status(StatusCodes.OK).json({
+            message: "User registered successfully. Please verify your email.",
+            success: true,
+        });
+    } catch (error: any) {
         console.error("Error during registration:", error);
-        res.status(StatusCodes.BAD_GATEWAY).json({
-            error: "Could not register user.",
+
+        // Distinguish Firebase errors
+        const firebaseErrorMessage =
+            error.code === "auth/email-already-in-use"
+                ? "Email is already in use."
+                : "An error occurred during registration.";
+
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: firebaseErrorMessage,
+            error: error.message,
             success: false,
         });
     }
