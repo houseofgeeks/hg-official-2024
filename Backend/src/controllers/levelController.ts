@@ -60,8 +60,8 @@ export const submitLevelUpRequest = async (req: Request, res: Response): Promise
 export const getPendingRequestsByWing = async (req: Request, res: Response): Promise<void> => {
     const { wing } = req.params;
 
+
     try {
-        // Query Firestore for pending requests with the specified wing
         const requestsRef = collection(db, "levelUpRequests");
         const q = query(
             requestsRef,
@@ -70,14 +70,12 @@ export const getPendingRequestsByWing = async (req: Request, res: Response): Pro
         );
         const querySnapshot = await getDocs(q);
 
-        // Extract data from Firestore documents
         const pendingRequests: LevelUpRequest[] = [];
         querySnapshot.forEach(doc => {
             const data = doc.data() as LevelUpRequest;
             pendingRequests.push(data);
         });
 
-        // Return the results
         res.status(200).json({
             message: `Pending level-up requests for wing ${wing}`,
             requests: pendingRequests,
@@ -87,77 +85,86 @@ export const getPendingRequestsByWing = async (req: Request, res: Response): Pro
         res.status(500).json({ message: "Error fetching pending level-up requests" });
     }
 };
-// export const acceptLevelUpRequest = async (req: Request & { user?: User }, res: Response): Promise<void> => {
-//     const { requestId } = req.params; // Request ID from the route
-//     const user = req.user as User; // Extracted from authenticated user's token (middleware)
-//     const role = user.role;
-//     const userWing = user.assignedWings;
+export const acceptLevelUpRequest = async (req: Request & { user?: User }, res: Response): Promise<void> => {
+    const { requestId } = req.params;
+    const user = req.user as User;
 
-//     if (!userWing || userWing.length === 0) {
-//         res.status(404).json({ message: "You are not assigned to any wings" });
-//         return;
-//     }
+    if (!user) {
+        res.status(401).json({ message: "Unauthorized: User information is missing" });
+        return;
+    }
 
-//     try {
-//         // Fetch the request document
-//         const requestRef = doc(db, "levelUpRequests", requestId);
-//         const requestDoc = await getDoc(requestRef);
+    const { uid, role } = user;
 
-//         if (!requestDoc.exists()) {
-//             res.status(404).json({ message: "Request not found" });
-//             return;
-//         }
+    try {
+        const userRef = doc(db, "users", uid);
+        const userDoc = await getDoc(userRef);
 
-//         const requestData = requestDoc.data() as LevelUpRequest;
+        if (!userDoc.exists()) {
+            res.status(404).json({ message: "User not found in Firestore" });
+            return;
+        }
 
-//         // Check if the request is still pending
-//         if (requestData.status !== "pending") {
-//             res.status(400).json({ message: "Request is not pending" });
-//             return;
-//         }
+        const fullUserData = userDoc.data() as User;
+        const userWing = fullUserData.assignedWings;
 
-//         // Check authorization
-//         if (role !== "admin" && role !== "lead" && role !== "coordinator") {
-//             res.status(403).json({ message: "Unauthorized: You do not have permission to accept requests" });
-//             return;
-//         }
+        if (!userWing || userWing.length === 0) {
+            res.status(404).json({ message: "You are not assigned to any wings" });
+            return;
+        }
 
-//         // Check if the request's wing is within the user's assigned wings
-//         if (role !== "admin" && !userWing.includes(requestData.wing)) {
-//             res.status(403).json({ message: "Unauthorized: You can only manage requests for your assigned wings" });
-//             return;
-//         }
+        const requestRef = doc(db, "levelUpRequests", requestId);
+        const requestDoc = await getDoc(requestRef);
 
-//         // Fetch the user document for the requester
-//         const userRef = doc(db, "users", requestData.userId);
-//         const userDoc = await getDoc(userRef);
+        if (!requestDoc.exists()) {
+            res.status(404).json({ message: "Request not found" });
+            return;
+        }
 
-//         if (!userDoc.exists()) {
-//             res.status(404).json({ message: "Requester not found" });
-//             return;
-//         }
+        const requestData = requestDoc.data() as LevelUpRequest;
 
-//         const userData = userDoc.data() as User;
-//         const userLevels = userData.levels || {};
+        if (requestData.status !== "pending") {
+            res.status(400).json({ message: "Request is not pending" });
+            return;
+        }
 
-//         // Update the user's level for the requested wing
-//         const currentLevel = userLevels[requestData.wing as Wing] || 0;
-//         userLevels[requestData.wing as Wing] = currentLevel + 1;
+        if (role !== "admin" && role !== "lead" && role !== "coordinator") {
+            res.status(403).json({ message: "Unauthorized: You do not have permission to accept requests" });
+            return;
+        }
 
-//         await updateDoc(userRef, { levels: userLevels });
+        if (role !== "admin" && !userWing.includes(requestData.wing)) {
+            res.status(403).json({ message: "Unauthorized: You can only manage requests for your assigned wings" });
+            return;
+        }
 
-//         // Update the request status
-//         await updateDoc(requestRef, { status: "accepted" });
+        const requesterRef = doc(db, "users", requestData.userId);
+        const requesterDoc = await getDoc(requesterRef);
 
-//         res.status(200).json({
-//             message: "Request accepted successfully",
-//             updatedUser: {
-//                 userId: requestData.userId,
-//                 updatedLevels: userLevels,
-//             },
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Error accepting the request" });
-//     }
-// };
+        if (!requesterDoc.exists()) {
+            res.status(404).json({ message: "Requester not found" });
+            return;
+        }
+
+        const requesterData = requesterDoc.data() as User;
+        const userLevels = requesterData.levels || {};
+
+        const currentLevel = userLevels[requestData.wing as Wing] || 0;
+        userLevels[requestData.wing as Wing] = currentLevel + 1;
+
+        await updateDoc(requesterRef, { levels: userLevels });
+
+        await updateDoc(requestRef, { status: "accepted" });
+
+        res.status(200).json({
+            message: "Request accepted successfully",
+            updatedUser: {
+                userId: requestData.userId,
+                updatedLevels: userLevels,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error accepting the request" });
+    }
+};
