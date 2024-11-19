@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
 import { assignWings } from '../../controllers/userController';
-import { submitLevelUpRequest } from '../../controllers/levelController';
+import { getPendingRequestsByWing, submitLevelUpRequest } from '../../controllers/levelController';
 const router: Router = express.Router();
 
 
@@ -27,6 +27,7 @@ router.post("/assign-wings", authenticateJWT, assignWings);
 //Level Routes
 
 router.post("/requests", authenticateJWT, submitLevelUpRequest);
+router.get("/requests/:wing/pending", authenticateJWT, getPendingRequestsByWing);
 
 
 
