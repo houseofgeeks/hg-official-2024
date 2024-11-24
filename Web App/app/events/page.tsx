@@ -1,10 +1,22 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useMemo, useEffect } from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState, useMemo, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import axios from "@/api/axios";
 import { IEvent } from "@/models/eventModel";
 import Navbar from "@/components/Navbar";
@@ -12,8 +24,9 @@ import AnimatingText from "@/components/AnimatingText";
 import { motion } from "framer-motion";
 
 export default function EventsPage() {
-  const [selectedWing, setSelectedWing] = useState<string>('all');
-  const [selectedTimeframe, setSelectedTimeframe] = useState<string>('upcoming');
+  const [selectedWing, setSelectedWing] = useState<string>("all");
+  const [selectedTimeframe, setSelectedTimeframe] =
+    useState<string>("upcoming");
   const [events, setEvents] = useState<IEvent[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +34,7 @@ export default function EventsPage() {
     const getAllEvents = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('api/v1/wing');
+        const response = await axios.get("api/v1/wing");
         setEvents(response.data);
       } catch (error) {
         console.log(error);
@@ -33,21 +46,27 @@ export default function EventsPage() {
   }, []);
 
   const wings = useMemo(() => {
-    const uniqueWings = Array.from(new Set(events.map(event => event.wing)));
-    return ['all', ...uniqueWings];
+    const uniqueWings = Array.from(new Set(events.map((event) => event.wing)));
+    return ["all", ...uniqueWings];
   }, [events]);
 
-  const formatDate = (firestoreTimestamp: { seconds: number; nanoseconds: number }) => {
+  const formatDate = (firestoreTimestamp: {
+    seconds: number;
+    nanoseconds: number;
+  }) => {
     const date = new Date(firestoreTimestamp.seconds * 1000);
     return date.toLocaleDateString(undefined, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
-  const convertFirestoreTimestamp = (timestamp: { seconds: number; nanoseconds: number }) => {
+  const convertFirestoreTimestamp = (timestamp: {
+    seconds: number;
+    nanoseconds: number;
+  }) => {
     return new Date(timestamp.seconds * 1000);
   };
 
@@ -55,11 +74,11 @@ export default function EventsPage() {
     const now = new Date();
     let filtered = events;
 
-    if (selectedWing !== 'all') {
-      filtered = filtered.filter(event => event.wing === selectedWing);
+    if (selectedWing !== "all") {
+      filtered = filtered.filter((event) => event.wing === selectedWing);
     }
 
-    filtered = filtered.filter(event => {
+    filtered = filtered.filter((event) => {
       const eventDate = convertFirestoreTimestamp(event.date);
       return selectedTimeframe === 'upcoming' ? eventDate >= now : eventDate < now;
     });
@@ -126,7 +145,6 @@ export default function EventsPage() {
                 </SelectContent>
               </Select>
             </div>
-
             <div className="w-full sm:w-48">
               <Select value={selectedTimeframe} onValueChange={setSelectedTimeframe}>
                 <SelectTrigger className="bg-purple-600/90 text-white font-semibold border-none rounded-none font-pixel uppercase hover:bg-purple-600 transition-colors">
@@ -166,7 +184,6 @@ export default function EventsPage() {
                   {filteredEvents.length}
                 </span>
               </div>
-
               <motion.div
                 variants={containerVariants}
                 initial="hidden"

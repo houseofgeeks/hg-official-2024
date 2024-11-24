@@ -153,3 +153,26 @@ body {
   bottom: -2.5rem;
   right: -2.5rem;
 }
+
+/* Webkit (Chrome, Safari, newer versions of Opera) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar width */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  display: none; /* Transparent track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6b21a8; /* Purple scrollbar */
+  border-radius: 20px; /* More rounded thumb */
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #7e22ce; /* Lighter purple on hover */
+}
+
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none; /* Remove scrollbar arrows */
+}

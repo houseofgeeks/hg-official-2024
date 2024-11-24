@@ -30,7 +30,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "firebase": "^11.0.1",
+    "firebase": "^11.0.2",
     "firebase-admin": "^12.7.0",
     "http-status-codes": "^2.3.0",
     "http-status-ts": "^2.0.1",
