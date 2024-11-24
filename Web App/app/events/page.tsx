@@ -98,19 +98,15 @@ export default function EventsPage() {
   }, [selectedWing, selectedTimeframe, events]);
 
   return (
-    // <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-950">
     <div className="min-h-screen bg-black">
-      <div className="container mx-auto px-4 pb-16">
-        {/* <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-lg rounded-lg"> */}
-        <Navbar />
-        {/* </div> */}
-
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 my-12">
+      <Navbar />
+      <div className="container mx-auto px-20 pb-16 pt-28">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
           <div className="w-full md:w-auto">
             <AnimatingText
               lines={["Events"]}
-              bgColor="white"
-              textColor="black"
+              bgColor="none"
+              textColor="white"
               cursorColor="green-700"
             />
           </div>
@@ -118,10 +114,10 @@ export default function EventsPage() {
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <div className="w-full sm:w-44">
               <Select value={selectedWing} onValueChange={setSelectedWing}>
-                <SelectTrigger className="bg-black/40 border-purple-500/30 text-purple-100 hover:bg-black/60 transition-all duration-300">
+                <SelectTrigger className="bg-[#9A43B1] border-none rounded-none text-purple-100 hover:bg-white hover:text-[#9A43B1] transition-all duration-300">
                   <SelectValue placeholder="Filter by Wing" />
                 </SelectTrigger>
-                <SelectContent className="bg-black/95 border-purple-500/30 text-purple-100">
+                <SelectContent className="bg-[none] rounded-none border-white text-white">
                   {wings.map((wing) => (
                     <SelectItem key={wing} value={wing}>
                       {wing === "all" ? "All Wings" : wing}
@@ -136,17 +132,17 @@ export default function EventsPage() {
                 value={selectedTimeframe}
                 onValueChange={setSelectedTimeframe}
               >
-                <SelectTrigger className="bg-black/40 border-purple-500/30 text-purple-100 hover:bg-black/60 transition-all duration-300">
+                <SelectTrigger className="bg-[#9A43B1] border-none rounded-none text-purple-100 hover:bg-white hover:text-[#9A43B1] transition-all duration-300">
                   <SelectValue placeholder="Select Timeframe" />
                 </SelectTrigger>
-                <SelectContent className="bg-black/95 border-purple-500/30 text-purple-100">
+                <SelectContent className="bg-[none] rounded-none border-white text-white">
                   <SelectItem
                     value="upcoming"
-                    className="hover:bg-purple-900/20 hover:text-white"
+                    className="hover:bg-zinc-800 cursor-pointer hover:text-white"
                   >
                     Upcoming Events
                   </SelectItem>
-                  <SelectItem value="past">Past Events</SelectItem>
+                  <SelectItem value="past" className="hover:bg-gray-800 cursor-pointer hover:text-white">Past Events</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -203,10 +199,9 @@ export default function EventsPage() {
                     <CardContent className="space-y-3 pb-4">
                       <div className="relative h-36 w-full overflow-hidden rounded-lg">
                         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-purple-900/20 group-hover:opacity-0 transition-all duration-500 z-10" />
-                        <Image
+                        <img
                           src={event.images[0]}
                           alt={event.title}
-                          fill
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                       </div>
