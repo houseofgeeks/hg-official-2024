@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import AuthPersistence from "@/components/AuthPersist";
+import RecoilContextProvider from "@/providers/RecoilRootProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +35,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased`}
       >
+        <RecoilContextProvider>
+        <AuthPersistence />
         {children}
+        </RecoilContextProvider>
       </body>
     </html>
   );

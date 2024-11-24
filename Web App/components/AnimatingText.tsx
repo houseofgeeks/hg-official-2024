@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 interface AnimatingTextProps {
   lines: string[];
@@ -12,13 +12,13 @@ interface AnimatingTextProps {
   cursorColor: string;
 }
 
-const AnimatingText = ({
+const AnimatingText: React.FC<AnimatingTextProps> = ({
   lines,
   delay = 100,
   bgColor,
   textColor,
   cursorColor,
-}: AnimatingTextProps) => {
+}) => {
   const { ref, inView } = useInView({ triggerOnce: true });
   const [displayedText, setDisplayedText] = useState<string[]>(
     Array(lines.length).fill("")
@@ -51,11 +51,14 @@ const AnimatingText = ({
   }, [inView, index, lineIndex, lines, delay]);
 
   return (
-    <motion.div ref={ref}>
+    <motion.div 
+      ref={ref} 
+      className="flex flex-col justify-center"
+    >
       {displayedText.map((text, i) => (
         <div
           key={i}
-          className={`text-7xl px-5 w-fit mt-5 max-md:text-5xl tracking-wide font-spaceGrotesk ${`text-${textColor}`} bg-${bgColor}`}
+          className={`text-4xl md:text-5xl lg:text-6xl px-4 w-fit mt-3 tracking-wide font-spaceGrotesk text-${textColor} bg-${bgColor}`}
         >
           {i === 0 && <span className={`text-${cursorColor} mr-2`}>&#62;</span>}
           {text}

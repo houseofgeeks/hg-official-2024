@@ -13,8 +13,8 @@ interface userData {
     username: string;
     levels: Record<Wing, number>;
 }
-const generateToken = (uid: string, role: UserRole): string => {
-    return jwt.sign({ uid, role }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+const generateToken = (uid: string, role: UserRole, username: string): string => {
+    return jwt.sign({ uid, role, username }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 }
 
 interface SignupRequest {
@@ -116,14 +116,16 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
         }
 
         const role: UserRole = userData.role;
+        const username = userData.username;
 
-        const token = generateToken(user.uid, role);
+        const token = generateToken(user.uid, role, username);
 
         res.cookie("token", token, { httpOnly: true, secure: true });
 
         res.status(200).json({
             message: "Login successful",
-            role
+            role,
+            username: username
         });
 
     } catch (error) {
@@ -170,6 +172,7 @@ export const getUserRole: RequestHandler = async (req: Request & { user?: User }
     }
 
     res.status(200).json({
-        role: user.role
+        role: user.role,
+        username: user.username
     });
 };

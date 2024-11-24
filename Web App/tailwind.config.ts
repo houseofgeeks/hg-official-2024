@@ -13,6 +13,10 @@ const config: Config = {
 			geistSans: ['var(--font-geist-sans)', 'sans-serif'],
 			geistMono: ['var(--font-geist-mono)', 'monospace'],
 			spaceGrotesk: ['var(--font-space-grotesk)', 'sans-serif'],
+			sans: ['var(--font-geist-sans)', 'sans-serif'],
+			mono: ['var(--font-geist-mono)', 'monospace'],
+			grotesk: ['var(--font-space-grotesk)', 'sans-serif'],
+			pixel: ['var(--font-press-start-2p)', 'monospace'],
 		},
   		colors: {
   			background: 'hsl(var(--background))',
