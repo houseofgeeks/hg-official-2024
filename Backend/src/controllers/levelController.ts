@@ -168,3 +168,80 @@ export const acceptLevelUpRequest = async (req: Request & { user?: User }, res: 
         res.status(500).json({ message: "Error accepting the request" });
     }
 };
+export const rejectLevelUpRequest = async (req: Request & { user?: User }, res: Response): Promise<void> => {
+    const { requestId } = req.params;
+    const user = req.user as User;
+
+    if (!user) {
+        res.status(401).json({ message: "Unauthorized: User information is missing" });
+        return;
+    }
+
+    const { uid, role } = user;
+
+    try {
+        const userRef = doc(db, "users", uid);
+        const userDoc = await getDoc(userRef);
+
+        if (!userDoc.exists()) {
+            res.status(404).json({ message: "User not found in Firestore" });
+            return;
+        }
+
+        const fullUserData = userDoc.data() as User;
+        const userWing = fullUserData.assignedWings;
+
+        if (!userWing || userWing.length === 0) {
+            res.status(404).json({ message: "You are not assigned to any wings" });
+            return;
+        }
+
+        const requestRef = doc(db, "levelUpRequests", requestId);
+        const requestDoc = await getDoc(requestRef);
+
+        if (!requestDoc.exists()) {
+            res.status(404).json({ message: "Request not found" });
+            return;
+        }
+
+        const requestData = requestDoc.data() as LevelUpRequest;
+
+        if (requestData.status !== "pending") {
+            res.status(400).json({ message: "Request is not pending" });
+            return;
+        }
+
+        if (role !== "admin" && role !== "lead" && role !== "coordinator") {
+            res.status(403).json({ message: "Unauthorized: You do not have permission to accept requests" });
+            return;
+        }
+
+        if (role !== "admin" && !userWing.includes(requestData.wing)) {
+            res.status(403).json({ message: "Unauthorized: You can only manage requests for your assigned wings" });
+            return;
+        }
+
+        const requesterRef = doc(db, "users", requestData.userId);
+        const requesterDoc = await getDoc(requesterRef);
+
+        if (!requesterDoc.exists()) {
+            res.status(404).json({ message: "Requester not found" });
+            return;
+        }
+
+
+
+
+        await updateDoc(requestRef, { status: "rejected" });
+
+        res.status(200).json({
+            message: "Request rejected successfully",
+            updatedUser: {
+                userId: requestData.userId,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error accepting the request" });
+    }
+};

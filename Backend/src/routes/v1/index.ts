@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
 import { assignWings, showUserProfile } from '../../controllers/userController';
-import { acceptLevelUpRequest, getPendingRequestsByWing, submitLevelUpRequest } from '../../controllers/levelController';
+import { acceptLevelUpRequest, getPendingRequestsByWing, rejectLevelUpRequest, submitLevelUpRequest } from '../../controllers/levelController';
 const router: Router = express.Router();
 
 
@@ -38,6 +38,8 @@ router.post("/requests", authenticateJWT, submitLevelUpRequest);
 router.get("/requests/:wing/pending", authenticateJWT, getPendingRequestsByWing);
 // here give the request id and rest is done already
 router.patch("/requests/:requestId/accept", authenticateJWT, acceptLevelUpRequest);
+// when we reject a request
+router.patch("/requests/:requestId/reject", authenticateJWT, rejectLevelUpRequest);
 
 
 
