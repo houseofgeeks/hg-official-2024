@@ -124,6 +124,7 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
 
         res.status(200).json({
             message: "Login successful",
+            id: user.uid,
             role,
             username: username
         });
@@ -173,6 +174,7 @@ export const getUserRole: RequestHandler = async (req: Request & { user?: User }
 
     res.status(200).json({
         role: user.role,
-        username: user.username
+        username: user.username,
+        id: user.uid
     });
 };

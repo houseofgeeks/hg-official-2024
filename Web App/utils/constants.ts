@@ -142,7 +142,7 @@ export const navItems = [
         link: '/team'
     },
     {
-        title: "About Us",
-        link: '/about'
+        title: "LevelUp Requests",
+        link: '/level'
     }
 ];

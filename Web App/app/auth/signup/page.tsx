@@ -25,6 +25,7 @@ interface SignupRequest {
 }
 
 interface FormData {
+  role: UserRole;
   email: string;
   password: string;
   name: string;
@@ -52,13 +53,13 @@ const Signup = () => {
           password: data.password,
           name: data.name,
           username: data.username,
-          role: "USER" as UserRole,
+          role: data.role,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true
+          withCredentials: true,
         }
       );
       console.log(res.data);
@@ -92,6 +93,22 @@ const Signup = () => {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               disabled={loading}
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Role
+            </label>
+            <select
+              name="role"
+              required
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              disabled={loading}
+            >
+              <option value={UserRole.STUDENT}>Student</option>
+              <option value={UserRole.COORDINATOR}>Coordinator</option>
+              <option value={UserRole.LEAD}>Lead</option>
+              <option value={UserRole.ADMIN}>Admin</option>
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">

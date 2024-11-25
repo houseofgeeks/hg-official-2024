@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import axios from "@/api/axios";
+import LevelRequest from "@/components/LevelRequest";
 
 // Define interfaces for our data structures
 interface Levels {
@@ -76,7 +77,7 @@ interface ApiResponse {
   profile: {
     name: string;
     levels: Levels;
-  }
+  };
 }
 
 const Page: React.FC = () => {
@@ -152,13 +153,16 @@ const Page: React.FC = () => {
             <div className="text-4xl font-spaceGrotesk text-center md:text-left">
               {user.name}
             </div>
-            <div className="font-spaceGrotesk text-xs flex flex-wrap justify-center md:justify-start gap-2 max-w-[40rem]">
-              {levels.map(([key, value], index) => (
-                <div key={index} className="flex text-white">
-                  <div className="bg-purple-500 px-3 py-1">{key}</div>
-                  <div className="bg-black px-3 py-1">{value}</div>
-                </div>
-              ))}
+            <div className="flex">
+              <div className="font-spaceGrotesk text-xs flex flex-wrap justify-center md:justify-start gap-2 max-w-[30rem]">
+                {levels.map(([key, value], index) => (
+                  <div key={index} className="flex text-white">
+                    <div className="bg-purple-500 px-3 py-1">{key}</div>
+                    <div className="bg-black px-3 py-1">{value}</div>
+                  </div>
+                ))}
+              </div>
+              <LevelRequest />
             </div>
           </div>
         </div>

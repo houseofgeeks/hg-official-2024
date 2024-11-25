@@ -17,6 +17,7 @@ const AuthPersistence = () => {
         });
         console.log(response);
         setUserState({
+          id: response.data.id,
           isAuthenticated: true,
           role: response.data.role,
           username: response.data.username,
@@ -24,6 +25,7 @@ const AuthPersistence = () => {
       } catch (error) {
         // If request fails, user is not authenticated
         setUserState({
+          id: "",
           isAuthenticated: false,
           role: null,
           username: null,

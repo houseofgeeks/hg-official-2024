@@ -56,11 +56,7 @@ export default function EventDetailsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black">
-        <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md">
-          <div className="container mx-auto">
-            <Navbar />
-          </div>
-        </div>
+        <Navbar />
         <div className="flex-1 flex justify-center items-center h-[calc(100vh-80px)]">
           <div className="space-y-4 text-center flex flex-col items-center justify-center font-pixel">
             <div className="relative w-16 h-16">
@@ -77,12 +73,8 @@ export default function EventDetailsPage() {
   if (!event) {
     return (
       <div className="min-h-screen bg-black">
-        <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md">
-          <div className="container mx-auto">
-            <Navbar />
-          </div>
-        </div>
-        <div className="flex-1 container mx-auto px-4 flex flex-col items-center justify-center h-[calc(100vh-80px)]">
+        <Navbar />
+        <div className="flex-1 container mx-auto flex flex-col items-center justify-center h-[calc(100vh-80px)]">
           <div className="text-center space-y-4">
             <h1 className="text-3xl font-bold font-pixel text-white">EVENT NOT FOUND</h1>
             <p className="text-gray-400 font-pixel">The event you're looking for doesn't exist or has been removed.</p>
@@ -101,6 +93,7 @@ export default function EventDetailsPage() {
 
   return (
     <div className="h-screen bg-black overflow-y-auto">
+      <Navbar />
       <div className="fixed top-0 left-0 w-full h-full">
         <div className="absolute inset-0 overflow-hidden opacity-20 h-full">
           <div className="grid grid-cols-12 gap-4 p-4 text-purple-500 font-mono h-full text-xs">
@@ -113,13 +106,7 @@ export default function EventDetailsPage() {
         </div>
       </div>
 
-      <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md">
-        <div className="container mx-auto">
-          <Navbar />
-        </div>
-      </div>
-
-      <div className="relative container mx-auto px-4 py-8">
+      <div className="relative container mx-auto mt-20 px-20 py-8">
         <div className="mb-8">
           <AnimatingText
             lines={[event.title]}

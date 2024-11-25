@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userAtom } from "@/store/userAtom";
 import axios from "@/api/axios";
+import { UserRole } from "@/utils/enums";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -49,17 +50,24 @@ const Navbar = () => {
 
             <div className="hidden w-fit lg:block ml-20 z-30">
               <div className="flex items-center space-x-10">
-                {navItems.map((navItem, index) => (
-                  <Link href={navItem.link} key={index}>
-                    <Button
-                      className={`uppercase relative text-white bg-[none] border-none shadow-none hover:bg-[none] text-sm after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 after:ease-in-out hover:after:left-0 hover:after:w-full ${
-                        scrolled ? "hover:text-gray-200" : ""
-                      }`}
-                    >
-                      &#60; {navItem.title} &#47;&#62;
-                    </Button>
-                  </Link>
-                ))}
+                {navItems.map((navItem, index) =>{
+                  console.log(user.role, navItem.title);
+                  return user.role === 'student' &&
+                  navItem.title === "LevelUp Requests" ? (
+                    <></>
+                  ) : 
+                  (
+                    <Link href={navItem.link} key={index}>
+                      <Button
+                        className={`uppercase relative text-white bg-[none] border-none shadow-none hover:bg-[none] text-sm after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 after:ease-in-out hover:after:left-0 hover:after:w-full ${
+                          scrolled ? "hover:text-gray-200" : ""
+                        }`}
+                      >
+                        &#60; {navItem.title} &#47;&#62;
+                      </Button>
+                    </Link>
+                  )}
+                )}
               </div>
             </div>
           </div>
@@ -79,7 +87,7 @@ const Navbar = () => {
                 <User className="h-5 w-5" />
               </Button>
             </Link>
-            <div>{user.username}</div>
+            <div className="text-white">{user.role}</div>
             <Link href="/auth/login">
               <button className="border-2 border-white font-spaceGrotesk px-4 py-1 text-white hover:bg-white hover:text-purple-500 transition-all">
                 Login

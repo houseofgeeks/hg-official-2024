@@ -24,6 +24,7 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
+  id: string;
   role: string;
   username: string;
   message?: string;
@@ -35,6 +36,7 @@ interface FormData {
 }
 
 interface User {
+  id: string;
   role?: string;
   isAuthenticated: boolean;
   username?: string;
@@ -82,6 +84,7 @@ const Login = () => {
 
       // Update user state with the response data
       setUser({
+        id: response.data.id,
         isAuthenticated: true,
         role: response.data.role,
         username: response.data.username,

@@ -112,14 +112,10 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen h-screen flex flex-col bg-black">
-      <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md">
-        <div className="container mx-auto">
-          <Navbar />
-        </div>
-      </div>
+    <div className="min-h-screen h-fit flex flex-col bg-black">
+      <Navbar />
 
-      <div className="flex-1 container mx-auto flex flex-col px-4">
+      <div className="flex-1 container mx-auto flex flex-col px-20 mt-20">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 my-8">
           <div className="w-full md:w-auto">
             <AnimatingText
