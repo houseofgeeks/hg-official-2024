@@ -50,13 +50,12 @@ const Navbar = () => {
 
             <div className="hidden w-fit lg:block ml-20 z-30">
               <div className="flex items-center space-x-10">
-                {navItems.map((navItem, index) =>{
-                  console.log(user.role, navItem.title);
-                  return user.role === 'student' &&
-                  navItem.title === "LevelUp Requests" ? (
+                {navItems.map((navItem, index) => {
+                  console.log(user.isAuthenticated);
+                  return (user.role === "student" || !user.isAuthenticated) &&
+                    navItem.title === "LevelUp Requests" ? (
                     <></>
-                  ) : 
-                  (
+                  ) : (
                     <Link href={navItem.link} key={index}>
                       <Button
                         className={`uppercase relative text-white bg-[none] border-none shadow-none hover:bg-[none] text-sm after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 after:ease-in-out hover:after:left-0 hover:after:w-full ${
@@ -66,19 +65,13 @@ const Navbar = () => {
                         &#60; {navItem.title} &#47;&#62;
                       </Button>
                     </Link>
-                  )}
-                )}
+                  );
+                })}
               </div>
             </div>
           </div>
 
           <div className="hidden lg:flex items-center space-x-10 z-30">
-            <Button
-              className="bg-[none] border-none shadow-none text-white hover:text-gray-200"
-              size="icon"
-            >
-              <Bell className="h-5 w-5" />
-            </Button>
             <Link href={`/profile/${user.username}`}>
               <Button
                 className="bg-[none] border-none shadow-none text-white hover:text-gray-200"
@@ -88,11 +81,13 @@ const Navbar = () => {
               </Button>
             </Link>
             <div className="text-white">{user.role}</div>
-            <Link href="/auth/login">
-              <button className="border-2 border-white font-spaceGrotesk px-4 py-1 text-white hover:bg-white hover:text-purple-500 transition-all">
-                Login
-              </button>
-            </Link>
+            {!user.isAuthenticated && (
+              <Link href="/auth/login">
+                <button className="border-2 border-white font-spaceGrotesk px-4 py-1 text-white hover:bg-white hover:text-purple-500 transition-all">
+                  Login
+                </button>
+              </Link>
+            )}
           </div>
 
           <div className="lg:hidden">
@@ -109,22 +104,19 @@ const Navbar = () => {
                 align="end"
                 className="w-52 bg-white/10 backdrop-blur-md"
               >
-                <DropdownMenuItem className="text-white hover:bg-white/20">
-                  Home
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-white hover:bg-white/20">
-                  Events
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-white hover:bg-white/20">
-                  Team
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-white hover:bg-white/20">
-                  About Us
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-white hover:bg-white/20">
-                  <Bell className="mr-2 h-4 w-4" />
-                  Notifications
-                </DropdownMenuItem>
+                {navItems.map((navItem, index) => {
+                  console.log(user.isAuthenticated);
+                  return (user.role === "student" || !user.isAuthenticated) &&
+                    navItem.title === "LevelUp Requests" ? (
+                    <></>
+                  ) : (
+                    <Link href={navItem.link} key={index}>
+                      <DropdownMenuItem className="text-white hover:bg-white/20">
+                        {navItem.title}
+                      </DropdownMenuItem>
+                    </Link>
+                  );
+                })}
                 <DropdownMenuItem className="text-white hover:bg-white/20">
                   <User className="mr-2 h-4 w-4" />
                   Profile

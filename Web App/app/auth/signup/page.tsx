@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import AuthLayout from "../layout";
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import Image from "next/image";
 import axios from "@/api/axios";
 import { AxiosError } from "axios";
 import { UserRole } from "@/utils/enums";
@@ -35,7 +26,12 @@ interface FormData {
 const Signup = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const router = useRouter();
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,97 +70,154 @@ const Signup = () => {
   };
 
   return (
-    <AuthLayout title="Create Account" description="Sign up for a new account">
-      <CardContent>
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
+    <form
+      onSubmit={handleSignup}
+      className="space-y-6 p-8 w-[calc(100%-1.25rem)] my-auto max-w-[25rem] mx-auto font-spaceGrotesk"
+    >
+      <h2 className="text-3xl font-bold text-white text-center">Sign Up</h2>
+      {error && (
+        <div className="bg-red-500 text-white p-2 rounded text-center">
+          {error}
+        </div>
+      )}
+      <div className="space-y-4">
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/profile.png"
+              alt="name"
+              height={15}
+              width={15}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Role
-            </label>
-            <select
-              name="role"
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
-            >
-              <option value={UserRole.STUDENT}>Student</option>
-              <option value={UserRole.COORDINATOR}>Coordinator</option>
-              <option value={UserRole.LEAD}>Lead</option>
-              <option value={UserRole.ADMIN}>Admin</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Username
-            </label>
-            <input
-              type="text"
-              name="username"
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
+          </span>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            required
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/profile.png"
+              alt="username"
+              height={15}
+              width={15}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
+          </span>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/profile.png"
+              alt="email"
+              height={15}
+              width={15}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              required
-              minLength={6}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
+          </span>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/padlock.png"
+              alt="password"
+              height={15}
+              width={15}
             />
-          </div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          </span>
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            required
+            minLength={6}
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
+            disabled={loading}
+          />
+          <span
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
+          >
+            {passwordVisible ? (
+              <Image
+                src="/assets/icons/view.png"
+                alt="show password"
+                height={15}
+                width={15}
+              />
+            ) : (
+              <Image
+                src="/assets/icons/hide.png"
+                alt="hide password"
+                height={15}
+                width={15}
+              />
+            )}
+          </span>
+        </div>
+
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/profile.png"
+              alt="role"
+              height={15}
+              width={15}
+            />
+          </span>
+          <select
+            name="role"
+            required
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
             disabled={loading}
           >
-            {loading ? "Creating account..." : "Sign Up"}
-          </button>
-          <div className="text-center mt-4">
-            <Link
-              href="/auth/login"
-              className="text-sm text-blue-600 hover:text-blue-500"
-            >
-              Already have an account? Login
-            </Link>
-          </div>
-        </form>
-      </CardContent>
-    </AuthLayout>
+            <option value={UserRole.STUDENT} className="text-black">Student</option>
+            <option value={UserRole.COORDINATOR} className="text-black">Coordinator</option>
+            <option value={UserRole.LEAD} className="text-black">Lead</option>
+            <option value={UserRole.ADMIN} className="text-black">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full py-2 rounded-lg bg-white text-black font-semibold text-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-300"
+        disabled={loading}
+      >
+        {loading ? "Creating account..." : "SIGN UP"}
+      </button>
+
+      <div className="text-center mt-4 text-white">
+        <p>
+          Already have an account?{" "}
+          <a href="/auth/login" className="font-bold underline">
+            Login
+          </a>
+        </p>
+      </div>
+    </form>
   );
 };
 

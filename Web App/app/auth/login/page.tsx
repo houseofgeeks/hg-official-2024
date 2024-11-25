@@ -16,6 +16,10 @@ import axios from "@/api/axios";
 import { AxiosError } from "axios";
 import AuthLayout from "../layout";
 import Link from "next/link";
+import Image from "next/image";
+import AnimatingText from "@/components/AnimatingText";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // Define interfaces for the component
 interface LoginRequest {
@@ -48,9 +52,14 @@ interface ErrorResponse {
 
 const Login = () => {
   const [error, setError] = useState<string>("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const setUser = useSetRecoilState<User>(userAtom);
   const router = useRouter();
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,69 +108,97 @@ const Login = () => {
   };
 
   return (
-    <AuthLayout title="Welcome Back" description="Log in to your account">
-      <CardContent>
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              required
-              aria-required="true"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
-              aria-disabled={loading}
+    <form
+      onSubmit={handleLogin}
+      className="space-y-6 p-8 w-[calc(100%-1.25rem)] my-auto max-w-[25rem] mx-auto font-spaceGrotesk"
+    >
+      <h2 className="text-3xl font-bold text-white text-center">Login</h2>
+      {error && (
+        <div className="bg-red-500 text-white p-2 rounded text-center">
+          {error}
+        </div>
+      )}
+      <div className="space-y-4">
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/profile.png"
+              alt="username"
+              height={15}
+              width={15}
             />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              required
-              aria-required="true"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              disabled={loading}
-              aria-disabled={loading}
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          </span>
+          <input
+            id="email"
+            type="text"
+            name="email"
+            placeholder="email"
+            required
+            aria-required="true"
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
             disabled={loading}
             aria-disabled={loading}
+          />
+        </div>
+        <div className="relative">
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+            <Image
+              src="/assets/icons/padlock.png"
+              alt="username"
+              height={15}
+              width={15}
+            />
+          </span>
+          <input
+            id="password"
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            placeholder="password"
+            required
+            aria-required="true"
+            className="block w-full pl-10 py-2 rounded-lg bg-transparent text-white placeholder-gray-400 border-2 focus:outline-none border-zinc-200"
+            disabled={loading}
+            aria-disabled={loading}
+          />
+          <span
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
           >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-          <div className="text-center mt-4">
-            <Link
-              href="/auth/signup"
-              className="text-sm text-blue-600 hover:text-blue-500"
-            >
-              Don&apos;t have an account? Sign up
-            </Link>
-          </div>
-        </form>
-      </CardContent>
-    </AuthLayout>
+            {passwordVisible ? (
+              <Image
+                src="/assets/icons/view.png"
+                alt="username"
+                height={15}
+                width={15}
+              />
+            ) : (
+              <Image
+                src="/assets/icons/hide.png"
+                alt="username"
+                height={15}
+                width={15}
+              />
+            )}
+          </span>
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="w-full py-2 rounded-lg bg-white text-black font-semibold text-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-300"
+        disabled={loading}
+        aria-disabled={loading}
+      >
+        {loading ? "Logging in..." : "LOGIN"}
+      </button>
+      <div className="text-center mt-4 text-white">
+        <p>
+          Don&apos;t have an account?{" "}
+          <a href="/auth/signup" className="font-bold underline">
+            Sign Up
+          </a>
+        </p>
+      </div>
+    </form>
   );
 };
 
