@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { db } from "../config/firebase.config";
-import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, Timestamp } from "firebase/firestore";
 import { LevelUpRequest } from "../models/requestModel";
 import { User } from "../models/userModel"; // Importe the Wing enum
 import { Wing } from "../models/eventModel";
 
 export const submitLevelUpRequest = async (req: Request, res: Response): Promise<void> => {
-    const { userId, wing, proofOfWork } = req.body;
+    const { userId, wing, proofOfWork, name } = req.body;
 
     try {
         const userDoc = await getDoc(doc(db, "users", userId));
@@ -16,7 +16,21 @@ export const submitLevelUpRequest = async (req: Request, res: Response): Promise
             res.status(404).json({ message: "User not found" });
             return;
         }
+        const requestsRef = collection(db, "levelUpRequests");
+        const recentRequestsQuery = query(
+            requestsRef,
+            where("userId", "==", userId),
+            where("wing", "==", wing),
+            where("createdAt", ">", Timestamp.fromDate(new Date(Date.now() - 3 * 24 * 60 * 60 * 1000))) // 3 days before new request for now
+        );
 
+        const recentRequestsSnapshot = await getDocs(recentRequestsQuery);
+
+        // If there are any recent requests, reject the new one
+        if (!recentRequestsSnapshot.empty) {
+            res.status(400).json({ message: "You must wait 3 days before submitting another request for this wing." });
+            return;
+        }
         const userLevels = userData.levels as Record<Wing, number>;
         console.log(userLevels)
 
@@ -40,6 +54,7 @@ export const submitLevelUpRequest = async (req: Request, res: Response): Promise
         const newRequest: LevelUpRequest = {
             userId,
             wing,
+            name,
             proofOfWork,
             status: "pending",
             createdAt: new Date() as any,
@@ -73,8 +88,13 @@ export const getPendingRequestsByWing = async (req: Request, res: Response): Pro
         const pendingRequests: LevelUpRequest[] = [];
         querySnapshot.forEach(doc => {
             const data = doc.data() as LevelUpRequest;
-            pendingRequests.push(data);
+            pendingRequests.push({
+                ...data,
+                requestId: doc.id,
+            });
         });
+
+
 
         res.status(200).json({
             message: `Pending level-up requests for wing ${wing}`,
