@@ -103,3 +103,48 @@ export const showUserProfile = async (req: Request, res: Response): Promise<void
         }
     }
 };
+export const editUserProfile = async (req: Request, res: Response): Promise<void> => {
+    const { username, githubLink, linkedinLink, portfolioLink, Bio, Branch, Skills } = req.body;
+
+    console.log("Received Username:", username);
+
+    if (!username) {
+        res.status(400).json({ message: "Username is required" });
+        return;
+    }
+
+    try {
+        const userQuery = query(collection(db, "users"), where("username", "==", username));
+        const querySnapshot = await getDocs(userQuery);
+
+        if (querySnapshot.empty) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
+        const userDoc = querySnapshot.docs[0];
+        const userRef = doc(db, "users", userDoc.id);
+
+        const updatedData: Partial<User> = {
+            githubLink: githubLink || "",
+            linkedinLink: linkedinLink || "",
+            portfolioLink: portfolioLink || "",
+            Bio: Bio || "",
+            Branch: Branch || "",
+            Skills: Skills || ""
+        };
+
+        Object.keys(updatedData).forEach((key) => {
+            if (updatedData[key as keyof User] === undefined) {
+                delete updatedData[key as keyof User];
+            }
+        });
+
+        await updateDoc(userRef, updatedData);
+
+        res.status(200).json({ message: "Profile updated successfully", updatedData });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ message: "Error updating profile" });
+    }
+};

@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
-import { assignWings, showUserProfile } from '../../controllers/userController';
+import { assignWings, editUserProfile, showUserProfile } from '../../controllers/userController';
 import { acceptLevelUpRequest, getPendingRequestsByWing, rejectLevelUpRequest, submitLevelUpRequest } from '../../controllers/levelController';
 const router: Router = express.Router();
 
@@ -25,6 +25,7 @@ router.put("/event/:eventId", authenticateJWT, updateEvent);
 router.post("/assign-wings", authenticateJWT, assignWings);
 // For profile page to get all deatail using username 
 router.get("/user/:username", showUserProfile);
+router.patch("/editprofile", editUserProfile)
 
 
 //Level Routes
@@ -40,7 +41,6 @@ router.get("/requests/:wing/pending", authenticateJWT, getPendingRequestsByWing)
 router.patch("/requests/:requestId/accept", authenticateJWT, acceptLevelUpRequest);
 // when we reject a request
 router.patch("/requests/:requestId/reject", authenticateJWT, rejectLevelUpRequest);
-
 
 
 export default router;
