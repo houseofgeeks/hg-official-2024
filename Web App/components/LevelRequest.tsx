@@ -46,6 +46,7 @@ const LevelRequest = () => {
         userId: user.id,
         wing: selectedWing,
         proofOfWork,
+        name: user.name
       },
       {
         headers: {
@@ -55,7 +56,7 @@ const LevelRequest = () => {
       }
     );
     console.log(res);
-    
+
     console.log("Submitted:", { wing: selectedWing, proof: proofOfWork });
     setOpen(false); // Close dialog after submission
     setSelectedWing(""); // Reset form

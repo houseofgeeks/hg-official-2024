@@ -7,6 +7,8 @@ export const userAtom = atom({
         id: '',
         isAuthenticated: false,
         role: null,
-        username: null
+        username: '',
+        name: '',
+        assignedWings: []
     }
 })

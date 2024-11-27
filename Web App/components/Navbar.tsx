@@ -17,7 +17,6 @@ import { UserRole } from "@/utils/enums";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useRecoilValue(userAtom);
-  console.log(user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,7 +50,6 @@ const Navbar = () => {
             <div className="hidden w-fit lg:block ml-20 z-30">
               <div className="flex items-center space-x-10">
                 {navItems.map((navItem, index) => {
-                  console.log(user.isAuthenticated);
                   return (user.role === "student" || !user.isAuthenticated) &&
                     navItem.title === "LevelUp Requests" ? (
                     <></>
@@ -105,7 +103,6 @@ const Navbar = () => {
                 className="w-52 bg-white/10 backdrop-blur-md"
               >
                 {navItems.map((navItem, index) => {
-                  console.log(user.isAuthenticated);
                   return (user.role === "student" || !user.isAuthenticated) &&
                     navItem.title === "LevelUp Requests" ? (
                     <></>

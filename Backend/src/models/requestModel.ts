@@ -7,6 +7,7 @@ export interface LevelUpRequest {
     name: string;
     userId: string;
     wing: Wing;
+    currentLevel: number;
     proofOfWork: string;
     status: 'pending' | 'approved' | 'rejected';
     createdAt: Timestamp;

@@ -20,6 +20,7 @@ import Image from "next/image";
 import AnimatingText from "@/components/AnimatingText";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Wing } from "@/utils/enums";
 
 // Define interfaces for the component
 interface LoginRequest {
@@ -32,6 +33,8 @@ interface LoginResponse {
   role: string;
   username: string;
   message?: string;
+  name: string;
+  assignedWings: Wing[]
 }
 
 interface FormData {
@@ -44,6 +47,8 @@ interface User {
   role?: string;
   isAuthenticated: boolean;
   username?: string;
+  name: string;
+  assignedWings: Wing[];
 }
 
 interface ErrorResponse {
@@ -97,6 +102,8 @@ const Login = () => {
         isAuthenticated: true,
         role: response.data.role,
         username: response.data.username,
+        name: response.data.name,
+        assignedWings: response.data.assignedWings
       });
 
       router.push("/");

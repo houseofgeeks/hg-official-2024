@@ -56,6 +56,7 @@ export const submitLevelUpRequest = async (req: Request, res: Response): Promise
             wing,
             name,
             proofOfWork,
+            currentLevel,
             status: "pending",
             createdAt: new Date() as any,
         };

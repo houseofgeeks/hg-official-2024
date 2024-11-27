@@ -21,6 +21,8 @@ const AuthPersistence = () => {
           isAuthenticated: true,
           role: response.data.role,
           username: response.data.username,
+          name: response.data.name,
+          assignedWings: response.data.assignedWings
         });
       } catch (error) {
         // If request fails, user is not authenticated
@@ -28,7 +30,9 @@ const AuthPersistence = () => {
           id: "",
           isAuthenticated: false,
           role: null,
-          username: null,
+          username: '',
+          name: '',
+          assignedWings: []
         });
       }
     };
