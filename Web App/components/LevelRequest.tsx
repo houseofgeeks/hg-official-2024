@@ -27,7 +27,7 @@ const wings = [
   "SD",
   "Arcanum",
   "CyberSecurity",
-  "AI/ML",
+  "ML/AI",
   "IOTandRobotics",
   "CP",
 ];

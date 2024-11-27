@@ -82,6 +82,12 @@ export const showUserProfile = async (req: Request, res: Response): Promise<void
             message: "User profile fetched successfully",
             profile: {
                 uid: userData.uid,
+                skills: userData.Skills,
+                bio: userData.Bio,
+                branch: userData.Branch,
+                githubLink: userData.githubLink,
+                linkedinLink: userData.linkedinLink,
+                portfolioLink: userData.portfolioLink,
                 username: userData.username,
                 name: userData.name,
                 email: userData.email,
@@ -104,7 +110,7 @@ export const showUserProfile = async (req: Request, res: Response): Promise<void
     }
 };
 export const editUserProfile = async (req: Request, res: Response): Promise<void> => {
-    const { username, githubLink, linkedinLink, portfolioLink, Bio, Branch, Skills } = req.body;
+    const { username, name, githubLink, linkedinLink, portfolioLink, Bio, Branch, Skills } = req.body;
 
     console.log("Received Username:", username);
 
@@ -126,6 +132,7 @@ export const editUserProfile = async (req: Request, res: Response): Promise<void
         const userRef = doc(db, "users", userDoc.id);
 
         const updatedData: Partial<User> = {
+            name: name || "",
             githubLink: githubLink || "",
             linkedinLink: linkedinLink || "",
             portfolioLink: portfolioLink || "",

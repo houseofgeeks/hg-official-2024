@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,18 +33,17 @@ const RequestsPage = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const user = useRecoilValue(userAtom);
+  let wings = user.assignedWings;
 
   useEffect(() => {
     const getRequests = async () => {
       try {
         setLoading(true);
-        const wings = user.assignedWings;
-        console.log(wings);
         wings.map(async (wing) => {
           const res = await axios.get(`/api/v1/requests/${wing}/pending`, {
             withCredentials: true,
           });
-          setRequests([...requests, ...res.data.requests]);
+          setRequests((prev) => [...prev, ...res.data.requests]);
         })
         
       } catch (error) {
@@ -55,7 +54,7 @@ const RequestsPage = () => {
     };
 
     getRequests();
-  }, []);
+  }, [user]);
 
   const handleRequestAccept = async (id: string) => {
     try {

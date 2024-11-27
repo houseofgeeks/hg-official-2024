@@ -7,14 +7,16 @@ import { StatusCodes } from "http-status-codes";
 import { RequestHandler } from 'express';
 import jwt from "jsonwebtoken";
 import { Wing } from "../models/eventModel";
+
 interface userData {
     role: UserRole;
     name: string;
     username: string;
     levels: Record<Wing, number>;
 }
-const generateToken = (uid: string, role: UserRole, username: string, name: string, wings: Wing[]): string => {
-    return jwt.sign({ uid, role, username, name, wings }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+
+const generateToken = (uid: string, role: UserRole, username: string, name: string, assignedWings: Wing[]): string => {
+    return jwt.sign({ uid, role, username, name, assignedWings }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 }
 
 interface SignupRequest {

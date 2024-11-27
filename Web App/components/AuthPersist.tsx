@@ -11,11 +11,11 @@ const AuthPersistence = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Call your backend endpoint to check role
         const response = await axios.get("/api/v1/role", {
-          withCredentials: true, // Important for sending cookies
+          withCredentials: true,
         });
         console.log(response);
+
         setUserState({
           id: response.data.id,
           isAuthenticated: true,
@@ -25,15 +25,7 @@ const AuthPersistence = () => {
           assignedWings: response.data.assignedWings
         });
       } catch (error) {
-        // If request fails, user is not authenticated
-        setUserState({
-          id: "",
-          isAuthenticated: false,
-          role: null,
-          username: '',
-          name: '',
-          assignedWings: []
-        });
+        console.log(error);
       }
     };
 

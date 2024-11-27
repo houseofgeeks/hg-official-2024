@@ -96,6 +96,8 @@ const Login = () => {
         throw new Error("Invalid response from server");
       }
 
+      console.log(response.data);
+
       // Update user state with the response data
       setUser({
         id: response.data.id,
