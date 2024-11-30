@@ -37,13 +37,14 @@ const LevelRequest = () => {
   const [proofOfWork, setProofOfWork] = useState("");
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userAtom);
-
-  const handleSubmit = async (e) => {
+  console.log('user name is ', user.name)
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     const res = await axios.post(
       "/api/v1/requests",
       {
         userId: user.id,
+        name: user.name,
         wing: selectedWing,
         proofOfWork,
       },
@@ -55,7 +56,7 @@ const LevelRequest = () => {
       }
     );
     console.log(res);
-    
+
     console.log("Submitted:", { wing: selectedWing, proof: proofOfWork });
     setOpen(false); // Close dialog after submission
     setSelectedWing(""); // Reset form

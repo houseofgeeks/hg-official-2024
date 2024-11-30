@@ -43,9 +43,9 @@ const user: UserProfile = {
     ARCANUM: 0,
     CYBERSECURITY: 0,
   },
-  branch: "Electronics and Communication Engineering",
-  skills: "JavaScript, TypeScript, ReactJs, NextJs, NodeJs",
-  bio: "Aspiring software engineer",
+  branch: "Not Filled Yet",
+  skills: "Not Filled Yet",
+  bio: "Not Filled Yet",
 };
 
 // Social links data
@@ -112,9 +112,7 @@ const Page: React.FC = () => {
     };
 
     fetchUser();
-    // setBranch(user.branch);
-    // setSkills(user.skills);
-    // setBio(user.bio);
+
   }, [params.username]);
 
   const handleInputChange = (

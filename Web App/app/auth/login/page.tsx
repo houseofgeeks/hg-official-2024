@@ -30,6 +30,7 @@ interface LoginRequest {
 interface LoginResponse {
   id: string;
   role: string;
+  name: string;
   username: string;
   message?: string;
 }
@@ -42,6 +43,7 @@ interface FormData {
 interface User {
   id: string;
   role?: string;
+  name: string;
   isAuthenticated: boolean;
   username?: string;
 }
@@ -85,7 +87,7 @@ const Login = () => {
           withCredentials: true,
         }
       );
-
+      console.log("Login response is ", response);
       // Type guard to ensure response data has required fields
       if (!response.data.role || !response.data.username) {
         throw new Error("Invalid response from server");
@@ -96,6 +98,7 @@ const Login = () => {
         id: response.data.id,
         isAuthenticated: true,
         role: response.data.role,
+        name: response.data.name,
         username: response.data.username,
       });
 

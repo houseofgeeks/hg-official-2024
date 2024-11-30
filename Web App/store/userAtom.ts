@@ -6,6 +6,7 @@ export const userAtom = atom({
     default: {
         id: '',
         isAuthenticated: false,
+        name: null,
         role: null,
         username: null
     }
