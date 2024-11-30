@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { registerUser, loginUser, authenticateJWT, getUserRole } from '../../controllers/authController'
+import { registerUser, loginUser, authenticateJWT, getUserRole, registerAdmin } from '../../controllers/authController'
 import { createEvent, deleteEvent, getAllEvents, getEventById, updateEvent } from '../../controllers/eventController';
 import { assignWings, editUserProfile, showUserProfile } from '../../controllers/userController';
 import { acceptLevelUpRequest, getPendingRequestsByWing, rejectLevelUpRequest, submitLevelUpRequest } from '../../controllers/levelController';
@@ -8,6 +8,7 @@ const router: Router = express.Router();
 
 //Authentication Routes
 router.post('/signup', registerUser);
+router.post('/signupAdmin', registerAdmin);
 router.post("/signin", loginUser);
 
 // Role route (Authenticated route to get user role)

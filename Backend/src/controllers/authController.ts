@@ -178,6 +178,7 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
         res.status(200).json({
             message: "Login successful",
             id: user.uid,
+            name: userData.name,
             role,
             username: username
         });
