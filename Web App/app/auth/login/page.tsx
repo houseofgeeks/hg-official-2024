@@ -101,6 +101,7 @@ const Login = () => {
 
       router.push("/");
     } catch (err) {
+      console.log(err, " is our ERRRRRRRORRRRRRRRRRRR")
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);

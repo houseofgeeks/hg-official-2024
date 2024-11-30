@@ -34,7 +34,7 @@ interface SocialLink {
 
 // Initial user data
 const user: UserProfile = {
-  name: "Agnish Bhattacharya",
+  name: "Devansh Bhattacharya",
   levels: {
     CP: 2,
     SD: 2,
@@ -76,6 +76,9 @@ const links: SocialLink[] = [
 interface ApiResponse {
   profile: {
     name: string;
+    username: string;
+    branch: string;
+    bio: string;
     levels: Levels;
   };
 }
@@ -85,6 +88,7 @@ const Page: React.FC = () => {
 
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [levels, setLevels] = useState<[string, number][]>([]);
   const [branch, setBranch] = useState<string>("");
   const [skills, setSkills] = useState<string>("");
@@ -95,7 +99,11 @@ const Page: React.FC = () => {
       try {
         const username = params.username as string;
         const res = await axios.get<ApiResponse>(`/api/v1/user/${username}`);
-        setUsername(res.data.profile.name);
+        console.log(res, " is our result")
+        setName(res.data.profile.name);
+        setUsername(res.data.profile.username);
+        setBio(res.data?.profile?.bio)
+        setBranch(res.data.profile.branch);
         const levelObject = res.data.profile.levels;
         setLevels(Object.entries(levelObject));
       } catch (error) {
@@ -104,9 +112,9 @@ const Page: React.FC = () => {
     };
 
     fetchUser();
-    setBranch(user.branch);
-    setSkills(user.skills);
-    setBio(user.bio);
+    // setBranch(user.branch);
+    // setSkills(user.skills);
+    // setBio(user.bio);
   }, [params.username]);
 
   const handleInputChange = (
@@ -122,9 +130,9 @@ const Page: React.FC = () => {
     <section className="overflow-x-hidden">
       {/* Header Background */}
       <div className="w-full h-40 bg-black">
-        <div className="text-white font-spaceGrotesk text-xl flex gap-5 p-10">
-          <ArrowLeftIcon className="h-7 w-7" />
-          <Link href="/">
+        <div className="text-white font-spaceGrotesk text-xl flex flex-row gap-5 p-10">
+          <Link href="/" className="flex gap-1">
+            <ArrowLeftIcon className="h-7 w-7 cursor-pointer" />
             <span className="cursor-pointer hover:underline">Back to Home</span>
           </Link>
         </div>
@@ -151,7 +159,7 @@ const Page: React.FC = () => {
           {/* Profile Info */}
           <div className="flex flex-col gap-3 mt-2 items-center md:items-start">
             <div className="text-4xl font-spaceGrotesk text-center md:text-left">
-              {user.name}
+              {name}
             </div>
             <div className="flex">
               <div className="font-spaceGrotesk text-xs flex flex-wrap justify-center md:justify-start gap-2 max-w-[30rem]">
