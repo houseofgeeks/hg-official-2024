@@ -22,6 +22,7 @@ export interface User {
     Bio?: string;
     Branch?: string;
     Skills?: string;
+    twitter?: string
 
 }
 

@@ -7,6 +7,7 @@ import { Wing } from "../models/eventModel";
 
 export const submitLevelUpRequest = async (req: Request, res: Response): Promise<void> => {
     const { userId, wing, proofOfWork, name } = req.body;
+    console.log("Data is ", userId, wing, proofOfWork, name);
 
     try {
         const userDoc = await getDoc(doc(db, "users", userId));

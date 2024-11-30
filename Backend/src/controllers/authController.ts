@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { auth, db } from "../config/firebase.config"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, parseActionCodeURL } from "firebase/auth";
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { UserRole, User } from "../models/userModel";
 import { StatusCodes } from "http-status-codes";
@@ -11,6 +11,12 @@ interface userData {
     role: UserRole;
     name: string;
     username: string;
+    githubLink?: string;
+    linkedinLink?: string;
+    portfolioLink?: string;
+    Bio?: string;
+    Branch?: string;
+    Skills?: string;
     levels: Record<Wing, number>;
 }
 const generateToken = (uid: string, role: UserRole, username: string): string => {
@@ -29,10 +35,63 @@ interface SigninRequest {
     email: string;
     password: string;
 
-}export const registerUser = async (req: Request, res: Response) => {
+}
+export const registerUser = async (req: Request, res: Response) => {
+    let { email, password, role, name, username } = req.body;
+
+    if (!email || !password || !role || !name || !username) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: "All fields (email, password, role, name, username) are required.",
+            success: false,
+        });
+        return;
+    }
+    role = "student";
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const levels: Record<Wing, number> = Object.values(Wing).reduce((acc, wing) => {
+            acc[wing as Wing] = 0; // Default level is 0
+            return acc;
+        }, {} as Record<Wing, number>);
+        let Bio = "Not filled Yet", Branch = "Not filled Yet ", Skills = "Not filled Yet";
+        const userData: userData = {
+            role,
+            name,
+            username,
+            levels,
+            Bio, Branch, Skills
+        };
+
+        await setDoc(doc(db, "users", user.uid), userData);
+
+        await sendEmailVerification(user);
+
+        res.status(StatusCodes.OK).json({
+            message: "User registered successfully. Please verify your email.",
+            success: true,
+        });
+    } catch (error: any) {
+        console.error("Error during registration:", error);
+
+        const firebaseErrorMessage =
+            error.code === "auth/email-already-in-use"
+                ? "Email is already in use."
+                : "An error occurred during registration.";
+
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: firebaseErrorMessage,
+            error: error.message,
+            success: false,
+        });
+    }
+};
+
+export const registerAdmin = async (req: Request, res: Response) => {
     const { email, password, role, name, username } = req.body;
 
-    // Validate input fields
     if (!email || !password || !role || !name || !username) {
         res.status(StatusCodes.BAD_REQUEST).json({
             message: "All fields (email, password, role, name, username) are required.",
@@ -42,17 +101,14 @@ interface SigninRequest {
     }
 
     try {
-        // Create a Firebase user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Initialize levels for each wing
         const levels: Record<Wing, number> = Object.values(Wing).reduce((acc, wing) => {
             acc[wing as Wing] = 0; // Default level is 0
             return acc;
         }, {} as Record<Wing, number>);
 
-        // Prepare user data for Firestore
         const userData: userData = {
             role,
             name,
@@ -60,13 +116,10 @@ interface SigninRequest {
             levels,
         };
 
-        // Save user data in Firestore
         await setDoc(doc(db, "users", user.uid), userData);
 
-        // Send email verification
         await sendEmailVerification(user);
 
-        // Respond with success
         res.status(StatusCodes.OK).json({
             message: "User registered successfully. Please verify your email.",
             success: true,
@@ -74,7 +127,6 @@ interface SigninRequest {
     } catch (error: any) {
         console.error("Error during registration:", error);
 
-        // Distinguish Firebase errors
         const firebaseErrorMessage =
             error.code === "auth/email-already-in-use"
                 ? "Email is already in use."
@@ -90,6 +142,7 @@ interface SigninRequest {
 
 export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupRequest>, res: Response) => {
     const { email, password } = req.body;
+    console.log("Email and pass are ", email, password);
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
