@@ -124,7 +124,7 @@ export const loginUser: RequestHandler = async (req: Request<{}, {}, SignupReque
 
         const token = generateToken(user.uid, role, username, name, assignedWings);
 
-        res.cookie("token", token, { httpOnly: true, secure: true });
+        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000});
 
         res.status(200).json({
             message: "Login successful",
