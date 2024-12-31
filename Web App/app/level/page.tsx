@@ -1,17 +1,15 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   CheckCircle2,
   XCircle,
   Clock,
   User,
   ScrollText,
-  AlertCircle,
 } from "lucide-react";
 import axios from "@/api/axios";
 import Navbar from "@/components/Navbar";
@@ -33,7 +31,7 @@ const RequestsPage = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const user = useRecoilValue(userAtom);
-  let wings = user.assignedWings;
+  const wings = user.assignedWings;
 
   useEffect(() => {
     const getRequests = async () => {
@@ -54,7 +52,7 @@ const RequestsPage = () => {
     };
 
     getRequests();
-  }, [user]);
+  }, [user, wings]);
 
   const handleRequestAccept = async (id: string) => {
     try {

@@ -80,7 +80,7 @@ const TestimonialsSection: React.FC<TestimonialsProps> = ({ testimonials, alumni
       </div>
 
       <div className="flex flex-col md:flex-row flex-wrap gap-8 justify-center items-stretch mb-16">
-        {testimonials.map((item, index) => renderCard(item, true))}
+        {testimonials.map((item) => renderCard(item, true))}
       </div>
 
       <div className="text-3xl md:text-5xl text-black font-semibold mx-auto w-fit flex items-center bg-white px-4 md:px-5 py-2 mb-24">
@@ -89,7 +89,7 @@ const TestimonialsSection: React.FC<TestimonialsProps> = ({ testimonials, alumni
       </div>
 
       <div className="flex flex-col md:flex-row flex-wrap gap-8 justify-center items-stretch">
-        {alumnis.map((item, index) => renderCard(item, false))}
+        {alumnis.map((item) => renderCard(item, false))}
       </div>
     </section>
   );

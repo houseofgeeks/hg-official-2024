@@ -15,7 +15,8 @@ export interface IEvent {
     wing: Wing;
     date: Timestamp;
     images: string[];
-    description: string,
+    description: string;
+    location?: string;
     createdAt: Timestamp;
     updatedAt: Timestamp;
     creatorId?: string

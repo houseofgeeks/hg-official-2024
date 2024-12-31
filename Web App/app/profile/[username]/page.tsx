@@ -28,15 +28,6 @@ interface Levels {
   CYBERSECURITY: number;
 }
 
-interface UserProfile {
-  name: string;
-  levels: Levels;
-  username: string;
-  branch: string;
-  skills: string;
-  bio: string;
-}
-
 interface SocialLink {
   title: string;
   icon: string;
@@ -98,7 +89,7 @@ const Page: React.FC = () => {
   const update = async () => {
     console.log(socialLinks);
     try {
-      const res = await axios.patch("/api/v1/editprofile", {
+      await axios.patch("/api/v1/editprofile", {
         username,
         name,
         Branch: branch,
@@ -131,7 +122,7 @@ const Page: React.FC = () => {
         const portfolioLink = res.data.profile.portfolioLink;
         const linkedinLink = res.data.profile.linkedinLink;
         setSocialLinks((prev) => {
-          let linksarray = prev;
+          const linksarray = prev;
           linksarray[0].link = githubLink;
           linksarray[1].link = linkedinLink;
           linksarray[2].link = portfolioLink;
@@ -262,7 +253,7 @@ const Page: React.FC = () => {
                           className="col-span-2 h-8"
                           onChange={(e) => {
                             setSocialLinks((prev) => {
-                              let linkArray = prev;
+                              const linkArray = prev;
                               linkArray[index].link = e.target.value;
                               return linkArray;
                             });

@@ -6,13 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User, Bell } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { navItems } from "@/utils/constants";
 import Link from "next/link";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userAtom } from "@/store/userAtom";
-import axios from "@/api/axios";
-import { UserRole } from "@/utils/enums";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);

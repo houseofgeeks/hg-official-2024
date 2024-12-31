@@ -1,24 +1,21 @@
 "use client";
 
 import AnimatingText from "@/components/AnimatingText";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function AuthLayout({
   children,
-  title,
-  description,
 }: {
   children: React.ReactNode;
-  title: string;
-  description: string;
 }) {
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  useEffect(() => {
+    // Ensure this runs only on the client side
+    setWindowHeight(window.innerHeight);
+  }, []);
+
   return (
     <div className="flex min-h-screen h-fit">
       <div className="hidden lg:flex lg:w-1/2 justify-end">
@@ -30,9 +27,9 @@ export default function AuthLayout({
             textColor="white"
           />
           <p className="font-spaceGrotesk text-black text-xl">
-            "Become a part of the House of Geeks and step into a realm of
-            innovation, collaboration, and endless possibilities. Let’s shape
-            the future, together!"
+            &quot;Become a part of the House of Geeks and step into a realm of
+            innovation, collaboration, and endless possibilities. Let&apos;s
+            shape the future, together!&quot;
           </p>
         </div>
         <div className="h-screen w-5">
@@ -40,7 +37,7 @@ export default function AuthLayout({
             src="/assets/images/login_separator2.png"
             alt="separator"
             width={20}
-            height={window.innerHeight}
+            height={windowHeight}
             className="h-full w-full object-cover"
           />
         </div>
@@ -52,7 +49,7 @@ export default function AuthLayout({
             src="/assets/images/login_separator2.png"
             alt="separator"
             width={20}
-            height={window.innerHeight}
+            height={windowHeight}
             className="h-full w-full object-cover"
           />
         </div>

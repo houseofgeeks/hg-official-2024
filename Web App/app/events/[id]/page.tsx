@@ -77,7 +77,7 @@ export default function EventDetailsPage() {
         <div className="flex-1 container mx-auto flex flex-col items-center justify-center h-[calc(100vh-80px)]">
           <div className="text-center space-y-4">
             <h1 className="text-3xl font-bold font-pixel text-white">EVENT NOT FOUND</h1>
-            <p className="text-gray-400 font-pixel">The event you're looking for doesn't exist or has been removed.</p>
+            <p className="text-gray-400 font-pixel">The event you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           </div>
           <Link
             href="/events"

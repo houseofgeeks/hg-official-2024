@@ -9,8 +9,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -19,7 +17,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import axios from "@/api/axios";
-import { headers } from "next/headers";
 import { useRecoilValue } from "recoil";
 import { userAtom } from "@/store/userAtom";
 
@@ -38,7 +35,7 @@ const LevelRequest = () => {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userAtom);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await axios.post(
       "/api/v1/requests",

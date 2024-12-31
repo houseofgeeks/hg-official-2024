@@ -1,26 +1,13 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { useSetRecoilState } from "recoil";
 import { userAtom } from "@/store/userAtom";
 import axios from "@/api/axios";
-import { AxiosError } from "axios";
-import AuthLayout from "../layout";
-import Link from "next/link";
 import Image from "next/image";
-import AnimatingText from "@/components/AnimatingText";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Wing } from "@/utils/enums";
+import { AxiosError } from "axios";
 
 // Define interfaces for the component
 interface LoginRequest {
@@ -49,10 +36,6 @@ interface User {
   username?: string;
   name: string;
   assignedWings: Wing[];
-}
-
-interface ErrorResponse {
-  message: string;
 }
 
 const Login = () => {
@@ -110,7 +93,8 @@ const Login = () => {
 
       router.push("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      const error = err as AxiosError<{ message?: string }>;
+      setError(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
